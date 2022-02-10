@@ -1,5 +1,7 @@
 package com.Reto1.Reto1.controller;
 
+import com.Reto1.Reto1.dto.AuthenticationResponse;
+import com.Reto1.Reto1.dto.LoginRequest;
 import com.Reto1.Reto1.dto.RegisterCinemaRequest;
 import com.Reto1.Reto1.dto.RegisterRequest;
 import com.Reto1.Reto1.service.AuthService;
@@ -40,5 +42,10 @@ public class AuthController {
         return new ResponseEntity<>("Account Activated Success",HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
+    }
+    
 
 }

@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.Reto1.Reto1.dto.AuthenticationResponse;
+import com.Reto1.Reto1.dto.LoginRequest;
 import com.Reto1.Reto1.dto.RegisterCinemaRequest;
 import com.Reto1.Reto1.dto.RegisterRequest;
 import com.Reto1.Reto1.exception.CinemasDoLabException;
@@ -14,7 +16,12 @@ import com.Reto1.Reto1.model.VerificationToken;
 import com.Reto1.Reto1.repository.CinemaRepository;
 import com.Reto1.Reto1.repository.SubscriberRepository;
 import com.Reto1.Reto1.repository.VerificationTokenRepository;
+import com.Reto1.Reto1.security.JwtProvider;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +37,9 @@ public class AuthService {
     private final CinemaRepository cinemaRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
     
     @Transactional
     public void signUp(RegisterRequest registerRequest) {
@@ -50,7 +60,20 @@ public class AuthService {
         mailService.sendMail(new NotificationEmail("Please Activate your Account",
                 subscriber.getEmail(), "\nThank you for signing up to Cinemas DoLab, " +
                 "please click on the below url to activate your account :\n" +
-                "http://localhost:8080/api/auth/accountVerification/" + token));
+                "http://localhost:8090/api/auth/accountVerification/" + token));
+    }
+
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+                .username(loginRequest.getUsername())
+                .build();
     }
 
     public void signUpCinema(RegisterCinemaRequest registerCinemaRequest) {
@@ -64,6 +87,7 @@ public class AuthService {
         cinema.setEnabled(true);
 
         cinemaRepository.save(cinema);
+        
     }
 
     private String generateVerificationToken(Subscriber subscriber) {
@@ -80,6 +104,7 @@ public class AuthService {
         verificationToken.orElseThrow(()-> new CinemasDoLabException("Invalid token"));
         fetchUserAndEnable(verificationToken.get());
     }
+
 
     public void fetchUserAndEnable(VerificationToken verificationToken){
         String username = verificationToken.getSubscriber().getUsername();
