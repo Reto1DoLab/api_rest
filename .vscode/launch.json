@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Reto1Application<Reto1>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.Reto1.Reto1.Reto1Application",
+            "projectName": "Reto1",
+            "args": ""
+        }
+    ]
+}
