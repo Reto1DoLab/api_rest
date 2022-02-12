@@ -1,8 +1,10 @@
 package com.Reto1.Reto1.service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
+import com.Reto1.Reto1.dto.RegisterRequest;
 import com.Reto1.Reto1.model.Subscriber;
 import com.Reto1.Reto1.repository.AdminRepository;
 import com.Reto1.Reto1.repository.CinemaRepository;
@@ -43,6 +45,10 @@ public class UserDetailsServicesImpl implements UserDetailsService{
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {
         return singletonList(new SimpleGrantedAuthority(role));
+    }
+
+    public List<RegisterRequest> getAll() {
+        return null;
     }
     
 }

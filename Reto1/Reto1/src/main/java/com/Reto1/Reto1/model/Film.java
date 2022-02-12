@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class Film{
     @NotBlank(message = "Description is required")
     private String description;
     @NotBlank(message = "Date is required")
-    private Data date;
+    private Date date;
     @NotBlank(message = "ListF is required")
     @ManyToOne
     @JoinColumn(name = "idListFK", insertable = false, updatable = false)

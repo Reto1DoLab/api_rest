@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import org.hibernate.type.ListType;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,7 +21,7 @@ public class FilmList{
     @NotBlank(message = "Id is required")
     private Long id;
     @NotBlank(message = "Type is required")
-    private List type;
+    private ListType type;
     @NotBlank(message = "UserF is required")
     @ManyToOne
     @JoinColumn(name = "idUserFK", insertable = false, updatable = false)
