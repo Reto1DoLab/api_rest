@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
+import java.util.List;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -33,6 +35,9 @@ public class User {
     private String name;
     @NotEmpty(message = "Surname is required")
     private String surname;
+    @NotBlank(message = "Users is required")
+    @OneToMany(mappedBy = "UserF")
+    private List<FilmList> users;
 
     private Instant created;
     private boolean enabled;

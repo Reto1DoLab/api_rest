@@ -1,11 +1,13 @@
 package com.Reto1.Reto1.model;
-import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +18,7 @@ public class Cinema extends User{
     private String web;
     @NotBlank(message = "Address is required")
     private String address;
-}
+    @NotBlank(message = "Offers is required")
+    @OneToMany(mappedBy = "CinemaO")
+    private List<Offer> offers;
+} 

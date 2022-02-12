@@ -3,15 +3,22 @@ import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Actor extends Film{
+public class Actor{
     @NotBlank(message = "Id is required")
     private Long id;
     @NotBlank(message = "Name is required")
     private String name;
+    @NotBlank(message = "Films is required")
+    @OneToMany(mappedBy = "ActorF")
+    private List<Film> films;
 }
