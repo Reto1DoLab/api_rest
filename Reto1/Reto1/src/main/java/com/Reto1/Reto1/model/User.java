@@ -1,25 +1,31 @@
 package com.Reto1.Reto1.model;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+import java.time.Instant;
+import java.util.List;
+
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import java.time.Instant;
-import java.util.List;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -1,10 +1,16 @@
 package com.Reto1.Reto1.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
+import javax.validation.Valid;
+
 import com.Reto1.Reto1.dto.AuthenticationResponse;
 import com.Reto1.Reto1.dto.LoginRequest;
+import com.Reto1.Reto1.dto.RefreshTokenRequest;
 import com.Reto1.Reto1.dto.RegisterCinemaRequest;
 import com.Reto1.Reto1.dto.RegisterRequest;
 import com.Reto1.Reto1.service.AuthService;
+import com.Reto1.Reto1.service.RefreshTokenService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +29,7 @@ import lombok.AllArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/sign-up")
     public ResponseEntity<String> signUp(@RequestBody RegisterRequest registerRequest) {
@@ -47,5 +54,10 @@ public class AuthController {
         return authService.login(loginRequest);
     }
     
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
+    }
 
 }

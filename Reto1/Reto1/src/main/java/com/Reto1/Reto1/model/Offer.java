@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -15,18 +16,19 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Entity
 public class Offer{
+    @Id
     @NotBlank(message = "Id is required")
     private Long id;
     @NotBlank(message = "Description is required")
-    private String Description;
+    private String description;
     @NotBlank(message = "Deadline is required")
-    private Date Deadline;
+    private Date deadline;
     @NotBlank(message = "AddPoints is required")
-    private Integer AddPoints;
+    private Integer addPoints;
     @NotBlank(message = "SubPoints is required")
-    private Integer SubPoints;
+    private Integer subPoints;
     @NotBlank(message = "Cinemao is required")
     @ManyToOne
     @JoinColumn(name = "idCinemaFK", insertable = false, updatable = false)
-    private Cinema CinemaO;
+    private Cinema cinema;
 }

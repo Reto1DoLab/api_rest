@@ -13,11 +13,14 @@ import com.Reto1.Reto1.model.Cinema;
 import com.Reto1.Reto1.model.NotificationEmail;
 import com.Reto1.Reto1.model.Subscriber;
 import com.Reto1.Reto1.model.VerificationToken;
+import com.Reto1.Reto1.repository.AdminRepository;
 import com.Reto1.Reto1.repository.CinemaRepository;
 import com.Reto1.Reto1.repository.SubscriberRepository;
+import com.Reto1.Reto1.repository.UserRepository;
 import com.Reto1.Reto1.repository.VerificationTokenRepository;
 import com.Reto1.Reto1.security.JwtProvider;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,6 +38,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final SubscriberRepository subscriberRepository;
     private final CinemaRepository cinemaRepository;
+    private final AdminRepository adminRepository;
+    private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
@@ -44,7 +49,6 @@ public class AuthService {
     @Transactional
     public void signUp(RegisterRequest registerRequest) {
         Subscriber subscriber = new Subscriber();
-
         subscriber.setUsername(registerRequest.getUsername());
         subscriber.setName(registerRequest.getName());
         subscriber.setSurname(registerRequest.getSurname());
@@ -111,5 +115,9 @@ public class AuthService {
         Subscriber subscriber = subscriberRepository.findByUsername(username).orElseThrow(() -> new CinemasDoLabException("User not found with name - " + username));
         subscriber.setEnabled(true);
         subscriberRepository.save(subscriber);
+    }
+    public boolean isLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 }

@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IMSFilm implements ISFilm{
+public class IMSFilm implements FilmServiceInterface{
 
     @Autowired
-    private FilmRepository repoFi;
+    private FilmRepository filmRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -23,14 +23,14 @@ public class IMSFilm implements ISFilm{
     @Override
     public FilmDto save(FilmDto Film){
         Film FiEntity = modelMapper.map(Film, Film.class);
-        FiEntity = repoFi.save(FiEntity);
+        FiEntity = filmRepository.save(FiEntity);
 
         return modelMapper.map(FiEntity,FilmDto.class);
     }
 
     @Override
     public FilmDto get(long id){
-        Film FiEntity = repoFi.getById(id);
+        Film FiEntity = filmRepository.getById(id);
         FilmDto FiDto = modelMapper.map(FiEntity,FilmDto.class);
 
         return FiDto;
@@ -38,7 +38,7 @@ public class IMSFilm implements ISFilm{
 
     @Override
     public List<FilmDto> getAll(){
-        List<Film>listFiEntity = repoFi.findAll();
+        List<Film>listFiEntity = filmRepository.findAll();
         List<FilmDto> listFiDto = listFiEntity.stream().map(Fil -> modelMapper.map(Fil,FilmDto.class)).collect(Collectors.toList());
 
         return listFiDto;

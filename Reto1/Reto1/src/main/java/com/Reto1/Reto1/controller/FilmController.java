@@ -18,19 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/Film")
+@RequestMapping("/film")
 public class FilmController {
     
-    @Autowired
-    IMSFilm fiservice;
+    IMSFilm filmsService;
 
-    @Autowired
-    IMSFilmList flservice;
+    IMSFilmList filmsListService;
 
     @GetMapping("/show")
     public ModelAndView showFilm(){
-        List<FilmDto> films=fiservice.getAll();
-        List<FilmListDto> filmlists=flservice.getAll();
+        List<FilmDto> films=filmsService.getAll();
+        List<FilmListDto> filmlists=filmsListService.getAll();
 
         var params = new HashMap<String,Object>();
         params.put("listFi", films);
@@ -42,8 +40,8 @@ public class FilmController {
     @GetMapping("/edit")
     public ModelAndView editFilm(@ModelAttribute("")long id){
         FilmForm form = new FilmForm();
-        form.setFilm(fiservice.get(id));
-        form.setLfilml(flservice.getAll());
+        form.setFilm(filmsService.get(id));
+        form.setLfilml(filmsListService.getAll());
 
         var params = new HashMap<String, Object>();
         params.put("form",form);
@@ -53,7 +51,7 @@ public class FilmController {
 
     @PostMapping("/save")
     public ModelAndView saveFilm(FilmForm fiForm){
-        fiservice.save(fiForm.getFilm());
+        filmsService.save(fiForm.getFilm());
         return new ModelAndView("");
     }
 }

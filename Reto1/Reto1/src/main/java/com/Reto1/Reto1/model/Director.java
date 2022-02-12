@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Entity
 public class Director{
+    @Id
     @NotBlank(message = "Id is required")
     private Long id;
     @NotBlank(message = "Name is required")
