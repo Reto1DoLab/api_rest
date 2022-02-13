@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.Reto1.Reto1.dto.RegisterRequest;
 import com.Reto1.Reto1.model.Subscriber;
+import com.Reto1.Reto1.model.User;
 import com.Reto1.Reto1.repository.AdminRepository;
 import com.Reto1.Reto1.repository.CinemaRepository;
 import com.Reto1.Reto1.repository.SubscriberRepository;
@@ -36,15 +37,17 @@ public class UserDetailsServicesImpl implements UserDetailsService{
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username)  {
-        Optional<Subscriber> userOptional = subscriberRepository.findByUsername(username);
-        Subscriber subscriber = userOptional
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional
                 .orElseThrow(() -> new UsernameNotFoundException("No user " +
                         "Found with username : " + username));
-
-        return new org.springframework.security
-                .core.userdetails.User(subscriber.getUsername(), subscriber.getPassword(),
-                subscriber.isEnabled(), true, true,
+        
+                return new org.springframework.security
+                .core.userdetails.User(user.getUsername(), user.getPassword(),
+                user.isEnabled(), true, true,
                 true, getAuthorities("USER"));
+        
+        
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {

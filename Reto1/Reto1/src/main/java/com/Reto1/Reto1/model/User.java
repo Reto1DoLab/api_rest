@@ -41,9 +41,9 @@ public class User {
     private String name;
     @NotEmpty(message = "Surname is required")
     private String surname;
-    @NotBlank(message = "Users is required")
-    @OneToMany(mappedBy = "UserF")
-    private List<FilmList> users;
+
+    @OneToMany(mappedBy = "user")
+    private List<FilmList> filmLists;
 
     private Instant created;
     private boolean enabled;

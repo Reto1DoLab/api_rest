@@ -14,6 +14,5 @@ public class FilmDto {
     private String title;
     private String description;
     private Date date;
-    private long idListFK;
-    private RegisterRequest ListF;
+    private String urlImage;
 }

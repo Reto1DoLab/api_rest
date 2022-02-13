@@ -1,7 +1,7 @@
 package com.Reto1.Reto1.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.Reto1.Reto1.dto.FilmDto;
 import com.Reto1.Reto1.model.Film;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IMSFilm implements FilmServiceInterface{
+public class FilmService implements FilmServiceInterface{
 
     @Autowired
     private FilmRepository filmRepository;
@@ -38,9 +38,19 @@ public class IMSFilm implements FilmServiceInterface{
 
     @Override
     public List<FilmDto> getAll(){
-        List<Film>listFiEntity = filmRepository.findAll();
-        List<FilmDto> listFiDto = listFiEntity.stream().map(Fil -> modelMapper.map(Fil,FilmDto.class)).collect(Collectors.toList());
-
-        return listFiDto;
+        try {
+            List<FilmDto> films = new ArrayList<>();
+            for( Film f : filmRepository.findAll() ){
+                films.add( new FilmDto( f.getId(),
+                                        f.getTitle(),
+                                        f.getDescription(),
+                                        f.getDate(),
+                                        f.getUrlImage()
+                                        ) );
+            }
+            return films;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

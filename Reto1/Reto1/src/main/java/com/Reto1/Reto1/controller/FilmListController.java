@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.Reto1.Reto1.dto.FilmListDto;
 import com.Reto1.Reto1.dto.RegisterRequest;
-import com.Reto1.Reto1.service.IMSFilmList;
+import com.Reto1.Reto1.service.FilmListService;
 import com.Reto1.Reto1.service.UserDetailsServicesImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class FilmListController {
 
     @Autowired
-    IMSFilmList flservice;
+    FilmListService filmListService;
     
     @Autowired
-    UserDetailsServicesImpl uservice;
+    UserDetailsServicesImpl userDetailsService;
     
     @GetMapping("/show")
     public ModelAndView showFilmList(){
 
-        List<FilmListDto> filmlists=flservice.getAll();
-        List<RegisterRequest> users=uservice.getAll();
+        List<FilmListDto> filmlists = filmListService.getAll();
+        List<RegisterRequest> users = userDetailsService.getAll();
 
         var params = new HashMap<String,Object>();
         params.put("listFl", filmlists);

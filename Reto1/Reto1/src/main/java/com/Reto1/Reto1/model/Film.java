@@ -27,6 +27,8 @@ public class Film{
     private String description;
     @NotBlank(message = "Date is required")
     private Date date;
+    @NotBlank(message = "urlImage is required")
+    private String urlImage;
     @NotBlank(message = "ListF is required")
     @ManyToOne
     @JoinColumn(name = "idListFK", insertable = false, updatable = false)

@@ -27,8 +27,8 @@ public class FilmList{
     private ListType type;
     @NotBlank(message = "UserF is required")
     @ManyToOne
-    @JoinColumn(name = "idUserFK", insertable = false, updatable = false)
-    private User UserF;
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private User user;
     @OneToMany(mappedBy = "ListF")
     private List<Film> films;
 }

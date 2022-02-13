@@ -13,5 +13,4 @@ public class FilmListDto {
     private long id;
     private ListType type;
     private long idUserFK;
-    private RegisterRequest UserF;
 }
