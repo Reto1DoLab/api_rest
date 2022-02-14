@@ -1,46 +1,48 @@
 package com.Reto1.Reto1.model;
-import javax.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Film{
     @Id
-    @NotBlank(message = "Id is required")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @NotBlank(message = "Title is required")
     private String title;
     @NotBlank(message = "Description is required")
     private String description;
-    @NotBlank(message = "Date is required")
+    @NotNull(message = "Date is required")
     private Date date;
     @NotBlank(message = "urlImage is required")
     private String urlImage;
-    @NotBlank(message = "ListF is required")
+    
     @ManyToOne
-    @JoinColumn(name = "idListFK", insertable = false, updatable = false)
+    @JoinColumn(name = "idListFK", insertable = true, updatable = true)
     private Film ListF;
-    @NotBlank(message = "Directors is required")
+
     @OneToMany(mappedBy = "FilmD")
     private List<Director> directors;
-    @NotBlank(message = "Categories is required")
+
     @OneToMany(mappedBy = "FilmC")
     private List<Category> Categories;
-    @NotBlank(message = "ActorF is required")
+
     @ManyToOne
-    @JoinColumn(name = "idActorFK", insertable = false, updatable = false)
+    @JoinColumn(name = "idActorFK", insertable = true, updatable = true)
     private Actor ActorF;
 }

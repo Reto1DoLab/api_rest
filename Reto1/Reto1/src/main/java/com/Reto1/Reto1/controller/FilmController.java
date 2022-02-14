@@ -8,9 +8,12 @@ import com.Reto1.Reto1.form.FilmForm;
 import com.Reto1.Reto1.service.FilmListService;
 import com.Reto1.Reto1.service.FilmService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +22,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/film")
+@RequestMapping("/api/film")
 public class FilmController {
     
     private final FilmService filmsService;
@@ -43,8 +46,10 @@ public class FilmController {
     }
 
     @PostMapping("/save")
-    public ModelAndView saveFilm(FilmForm fiForm){
-        filmsService.save(fiForm.getFilm());
-        return new ModelAndView("");
+    public ResponseEntity<String> saveFilm(@RequestBody FilmDto filmDto){
+        filmsService.save(filmDto);
+        return new ResponseEntity<>("Creation of movie "+ filmDto.getTitle()  +" Successful",
+                 HttpStatus.OK);
+        
     }
 }

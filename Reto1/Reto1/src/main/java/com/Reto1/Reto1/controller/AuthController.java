@@ -9,6 +9,8 @@ import com.Reto1.Reto1.dto.LoginRequest;
 import com.Reto1.Reto1.dto.RefreshTokenRequest;
 import com.Reto1.Reto1.dto.RegisterCinemaRequest;
 import com.Reto1.Reto1.dto.RegisterRequest;
+import com.Reto1.Reto1.dto.UserInfoRequest;
+import com.Reto1.Reto1.dto.UserInfoUpdateRequest;
 import com.Reto1.Reto1.service.AuthService;
 import com.Reto1.Reto1.service.RefreshTokenService;
 
@@ -48,6 +50,10 @@ public class AuthController {
         authService.verifyAccount(token);
         return new ResponseEntity<>("Account Activated Success",HttpStatus.OK);
     }
+    @GetMapping("/info/{username}")
+    public UserInfoRequest getPersonalInfo(@PathVariable String username){
+        return authService.getProfileInfo(username);
+    }
 
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
@@ -59,5 +65,9 @@ public class AuthController {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
         return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
     }
-
+    @PostMapping("/update-info")
+    public UserInfoRequest updateInfo(@Valid @RequestBody UserInfoUpdateRequest userInfoUpdateRequest) {
+        refreshTokenService.validateRefreshToken(userInfoUpdateRequest.getRefreshToken());  
+        return authService.updateProfileInfo(userInfoUpdateRequest);
+    }
 }

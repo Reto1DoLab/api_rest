@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Long> {
-    Optional<Cinema> findByWeb(String web);
+    Optional<Cinema> findByUsername(String username);
 }

@@ -20,7 +20,7 @@ public class Cinema extends User{
     private String web;
     @NotBlank(message = "Address is required")
     private String address;
-    @NotBlank(message = "Offers is required")
+    
     @OneToMany(mappedBy = "cinema")
     private List<Offer> offers;
 } 

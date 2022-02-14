@@ -1,20 +1,20 @@
 package com.Reto1.Reto1.dto;
 
+
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-
+import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class AuthenticationResponse {
-    private String authenticationToken;
+public class UserInfoUpdateRequest {
+    @NotBlank
     private String refreshToken;
-    private Instant expiresAt;
+    private String email;
     private String username;
-    private String role;
+    private String name;
+    private String surname;
+    private String password;
 }

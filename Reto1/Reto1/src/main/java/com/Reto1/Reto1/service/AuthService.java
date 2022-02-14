@@ -8,10 +8,13 @@ import com.Reto1.Reto1.dto.AuthenticationResponse;
 import com.Reto1.Reto1.dto.LoginRequest;
 import com.Reto1.Reto1.dto.RegisterCinemaRequest;
 import com.Reto1.Reto1.dto.RegisterRequest;
+import com.Reto1.Reto1.dto.UserInfoRequest;
+import com.Reto1.Reto1.dto.UserInfoUpdateRequest;
 import com.Reto1.Reto1.exception.CinemasDoLabException;
 import com.Reto1.Reto1.model.Cinema;
 import com.Reto1.Reto1.model.NotificationEmail;
 import com.Reto1.Reto1.model.Subscriber;
+import com.Reto1.Reto1.model.User;
 import com.Reto1.Reto1.model.VerificationToken;
 import com.Reto1.Reto1.repository.AdminRepository;
 import com.Reto1.Reto1.repository.CinemaRepository;
@@ -25,6 +28,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,26 +76,33 @@ public class AuthService {
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
+
+        String role = authenticate.getAuthorities().toString();
+        
+
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsername())
+                .role(role)
                 .build();
     }
-
+    
+    @Transactional
     public void signUpCinema(RegisterCinemaRequest registerCinemaRequest) {
         Cinema cinema = new Cinema();
         cinema.setUsername(registerCinemaRequest.getUsername());
         cinema.setEmail(registerCinemaRequest.getEmail());
-        cinema.setPassword(registerCinemaRequest.getPassword());
+        cinema.setName(registerCinemaRequest.getName());
+        cinema.setSurname(registerCinemaRequest.getSurname());
+        cinema.setPassword(passwordEncoder.encode(registerCinemaRequest.getPassword()));
         cinema.setWeb(registerCinemaRequest.getWeb());
         cinema.setAddress(registerCinemaRequest.getAddress());
         cinema.setCreated(Instant.now());
         cinema.setEnabled(true);
 
-        cinemaRepository.save(cinema);
-        
+        cinemaRepository.save(cinema);    
     }
 
     private String generateVerificationToken(Subscriber subscriber) {
@@ -120,4 +131,39 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
+
+    public UserInfoRequest getProfileInfo(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("No user " +
+                "Found with username : " + username)); 
+        UserInfoRequest profileInfoRequest = new UserInfoRequest();
+        profileInfoRequest.setUsername(user.getUsername());
+        profileInfoRequest.setName(user.getName());
+        profileInfoRequest.setSurname(user.getSurname());
+        profileInfoRequest.setEmail(user.getEmail());
+        return profileInfoRequest;
+    }
+
+    public UserInfoRequest updateProfileInfo(UserInfoUpdateRequest userInfoUpdateRequest) {
+        Optional<User> userOptional = userRepository.findByUsername(userInfoUpdateRequest.getUsername());
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("No user " +
+                "Found with username : " + userInfoUpdateRequest.getUsername())); 
+        UserInfoRequest profileInfoRequest = new UserInfoRequest();
+
+        user.setUsername(userInfoUpdateRequest.getUsername());
+        user.setName(userInfoUpdateRequest.getName());
+        user.setSurname(userInfoUpdateRequest.getSurname());
+        user.setEmail(userInfoUpdateRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userInfoUpdateRequest.getPassword()));
+
+        userRepository.save(user);
+
+        profileInfoRequest.setUsername(user.getUsername());
+        profileInfoRequest.setName(user.getName());
+        profileInfoRequest.setSurname(user.getSurname());
+        profileInfoRequest.setEmail(user.getEmail());
+        return profileInfoRequest;
+    }
+
+    
 }

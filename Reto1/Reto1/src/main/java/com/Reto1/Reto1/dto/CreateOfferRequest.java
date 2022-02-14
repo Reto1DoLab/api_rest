@@ -1,7 +1,7 @@
 package com.Reto1.Reto1.dto;
 
+import com.Reto1.Reto1.model.Cinema;
 import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FilmDto {
-    private String title;
+public class CreateOfferRequest {
     private String description;
-    private Date date;
-    private String urlImage;
+    private Date deadline;
+    private Integer addPoints;
+    private Integer subPoints;
+    private String cinemaUsername;
 }

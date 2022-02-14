@@ -21,11 +21,17 @@ public class FilmService implements FilmServiceInterface{
     private ModelMapper modelMapper;
 
     @Override
-    public FilmDto save(FilmDto Film){
-        Film FiEntity = modelMapper.map(Film, Film.class);
-        FiEntity = filmRepository.save(FiEntity);
-
-        return modelMapper.map(FiEntity,FilmDto.class);
+    public void save(FilmDto filmDto){
+        try {
+            Film film = new Film();
+            film.setTitle(filmDto.getTitle());
+            film.setDescription(filmDto.getDescription());
+            film.setDate(filmDto.getDate());
+            film.setUrlImage(filmDto.getUrlImage());
+            filmRepository.save(film);  
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
@@ -41,8 +47,7 @@ public class FilmService implements FilmServiceInterface{
         try {
             List<FilmDto> films = new ArrayList<>();
             for( Film f : filmRepository.findAll() ){
-                films.add( new FilmDto( f.getId(),
-                                        f.getTitle(),
+                films.add( new FilmDto( f.getTitle(),
                                         f.getDescription(),
                                         f.getDate(),
                                         f.getUrlImage()

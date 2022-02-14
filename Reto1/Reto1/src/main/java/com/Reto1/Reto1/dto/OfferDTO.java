@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FilmDto {
-    private String title;
+public class OfferDTO {
     private String description;
-    private Date date;
-    private String urlImage;
+    private Date deadline;
+    private Integer addPoints;
+    private Integer subPoints;
+    private String cinemaName;
+    private String cinemaSurname;
 }

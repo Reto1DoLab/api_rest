@@ -1,34 +1,37 @@
 package com.Reto1.Reto1.model;
-import javax.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Offer{
     @Id
-    @NotBlank(message = "Id is required")
-    private Long id;
+    @GeneratedValue(strategy = IDENTITY)
+    private Long idOffer;
     @NotBlank(message = "Description is required")
     private String description;
-    @NotBlank(message = "Deadline is required")
+    @NotNull(message = "Deadline is required")
     private Date deadline;
-    @NotBlank(message = "AddPoints is required")
+    @NotNull(message = "AddPoints is required")
     private Integer addPoints;
-    @NotBlank(message = "SubPoints is required")
+    @NotNull(message = "SubPoints is required")
     private Integer subPoints;
-    @NotBlank(message = "Cinemao is required")
+
     @ManyToOne
-    @JoinColumn(name = "idCinemaFK", insertable = false, updatable = false)
+    @JoinColumn(name = "id", insertable = false, updatable = true)
     private Cinema cinema;
 }
